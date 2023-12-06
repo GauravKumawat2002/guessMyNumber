@@ -3,10 +3,11 @@ const startGame = document.getElementsByClassName('start');
 const resetGame = document.getElementsByClassName('again');
 const checkButton = document.getElementsByClassName('check');
 const message = document.getElementsByClassName('message');
-const score = document.getElementsByClassName('score');
+const chancesLeft = document.getElementsByClassName('chances left');
 const highScore = document.getElementsByClassName('highscore');
-const scoreStringToNumber = Number(score[0].innerHTML);
+const scoreStringToNumber = Number(chancesLeft[0].innerHTML);
 const guess = document.getElementsByClassName('guess');
+const userInput = document.getElementById('userInput');
 let randomNumber = 0; // Storing random numbers
 let buttonClickCounter = 0; // Storing number of times a button is clicked
 let currentScore; // Storing Current Score
@@ -20,11 +21,20 @@ const randomNumberGenerator = () => {
   return randomNumber;
 };
 
+// Function for stopping user from inputting negative integers
+userInput.addEventListener('input', () => {
+  const inputValue = userInput.value;
+  if (inputValue < 0) {
+    alert('Please enter a number between 1 to 20 !');
+    userInput.value = '';
+  }
+});
+
 // Function fro changing the Score value
 const changeScore = counter => {
   for (let i = 0; i < counter; i++) {
-    score[0].innerHTML = scoreStringToNumber - i;
-    currentScore = Number(score[0].innerHTML);
+    chancesLeft[0].innerHTML = scoreStringToNumber - i;
+    currentScore = Number(chancesLeft[0].innerHTML);
   }
   return currentScore;
 };
@@ -32,7 +42,7 @@ const changeScore = counter => {
 // Sets the score back to 20 whenever it is invoked
 const defaultScoreSetter = counter => {
   for (let i = 0; i < counter; i++) {
-    score[0].innerHTML = 20;
+    chancesLeft[0].innerHTML = 20;
   }
 };
 
@@ -44,9 +54,9 @@ const storeHighScore = HighScore => {
 };
 
 // Resets everything (input field to blank, Score to 20, Highscore to 0) to it's default values
-const gameResetter = (scoreDefault, highScoreDefault) => {
+const gameResetter = (chancesLeftDefault, highScoreDefault) => {
   guess[0].value = '';
-  score[0].innerHTML = scoreDefault;
+  chancesLeft[0].innerHTML = chancesLeftDefault;
   highScore[0].innerHTML = highScoreDefault;
 };
 
@@ -90,7 +100,7 @@ checkButton[0].addEventListener('click', () => {
       changeScore(buttonClickCounter);
     }
   }
-  if (score[0].innerHTML === '0') {
+  if (chancesLeft[0].innerHTML === '0') {
     message[0].innerHTML = 'You Lose';
     checkButton[0].disabled = true;
   }
