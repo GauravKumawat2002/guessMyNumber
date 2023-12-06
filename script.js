@@ -5,7 +5,7 @@ const checkButton = document.getElementsByClassName('check');
 const message = document.getElementsByClassName('message');
 const chancesLeft = document.getElementsByClassName('chances left');
 const highScore = document.getElementsByClassName('highscore');
-const scoreStringToNumber = Number(chancesLeft[0].innerHTML);
+const chancesLeft_Number = Number(chancesLeft[0].innerHTML);
 const guess = document.getElementsByClassName('guess');
 const userInput = document.getElementById('userInput');
 let randomNumber = 0; // Storing random numbers
@@ -33,7 +33,7 @@ userInput.addEventListener('input', () => {
 // Function fro changing the Score value
 const changeScore = counter => {
   for (let i = 0; i < counter; i++) {
-    chancesLeft[0].innerHTML = scoreStringToNumber - i;
+    chancesLeft[0].innerHTML = chancesLeft_Number - i;
     currentScore = Number(chancesLeft[0].innerHTML);
   }
   return currentScore;
