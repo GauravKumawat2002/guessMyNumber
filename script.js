@@ -10,8 +10,8 @@ const guess = document.getElementsByClassName('guess');
 const userInput = document.getElementById('userInput');
 let randomNumber = 0; // Storing random numbers
 let buttonClickCounter = 0; // Storing number of times a button is clicked
-let currentScore; // Storing Current Score
-// let previousHighScore = 0; // For Storing Previous Round HighScore
+let currentScore = 0; // Storing Current Score
+let previousHighScore = 0; // For Storing Previous Round HighScore
 
 // Uitlity Functions
 
@@ -40,7 +40,7 @@ const changeScore = counter => {
 };
 
 // Sets the score back to 20 whenever it is invoked
-const defaultScoreSetter = counter => {
+const defaultChancesSetter = counter => {
   for (let i = 0; i < counter; i++) {
     chancesLeft[0].innerHTML = 20;
   }
@@ -49,8 +49,8 @@ const defaultScoreSetter = counter => {
 // Stores the Highscore
 const storeHighScore = HighScore => {
   buttonClickCounter++;
-  highScore[0].innerHTML = Number(HighScore);
-  defaultScoreSetter(buttonClickCounter);
+  highScore[0].innerHTML = HighScore;
+  defaultChancesSetter(buttonClickCounter);
 };
 
 // Resets everything (input field to blank, Score to 20, Highscore to 0) to it's default values
@@ -74,7 +74,7 @@ startGame[0].addEventListener('click', () => {
 
 // Logic for Again Button i.e., (resetting the game back to default except for highscore)
 resetGame[0].addEventListener('click', () => {
-  storeHighScore(highScore[0].innerHTML);
+  storeHighScore(Number(highScore[0].innerHTML));
   randomNumberGenerator();
   gameResetter(20, highScore[0].innerHTML);
   console.log(randomNumber);
