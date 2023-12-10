@@ -6,6 +6,8 @@ const userInput = document.getElementById("userInput");
 let randomNumber = 0; // Storing random numbers
 const defaultChances = document.getElementsByClassName("defaultChances");
 const defaultHighScore = document.getElementsByClassName("highscore");
+let previousHighScore = 0;
+let currentHighScore = 0;
 const message = document.getElementsByClassName("message");
 
 // Uitlity Functions
@@ -65,6 +67,7 @@ const updateChancesLeft = (clickCounter) => {
 const checkInput = () => {
   if (stringToNumber(userInput.value) === randomNumber) {
     message[0].innerHTML = "You Win!!!";
+    currentHighScore = stringToNumber(defaultChances[0].innerHTML);
     checkButton[0].disabled = true;
   } else {
     if (stringToNumber(userInput.value) > randomNumber)
@@ -103,7 +106,7 @@ startGame[0].addEventListener("click", () => {
 // Logic for Again Button i.e., (resetting the game back to default except for highscore)
 resetGame[0].addEventListener("click", () => {
   randomNumberGenerator();
-  gameResetter();
+  gameResetter(20, currentHighScore);
   logToConsole(randomNumber);
   checkButton[0].disabled = false;
 });
