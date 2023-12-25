@@ -103,5 +103,3 @@ checkButton[0].addEventListener("click", () => {
     checkButton[0].disabled = true;
   }
 });
-
-// Now i have a problem & that is whenever i click on start button the default Chances sets back to 20 which is what i want but the problem arises when i click on check button it keeps track of the chances remain from the last time &  it continues to subtract the chances left from that number but what i want is whenever i click on start button & the default Chances goes back to 20 the Check button should start reducing one number at a time from 20 not from the last number
