@@ -20,15 +20,6 @@ const randomNumberGenerator = () => {
   return randomNumber;
 };
 
-// Function fro changing the Score value
-// const changeScore = (counter) => {
-//   for (let i = 0; i < counter; i++) {
-//     defaultChances[0].innerHTML = defaultChancesStringToNumber - i;
-//     currentScore = Number(defaultChances[0].innerHTML);
-//   }
-//   return currentScore;
-// };
-
 // Function for changing the Score value
 const changeScore = () => {
   defaultChances[0].innerHTML = String(Number(defaultChances[0].innerHTML) - 1);
@@ -42,6 +33,18 @@ const defaultScoreSetter = (counter) => {
     defaultChances[0].innerHTML = 20;
   }
 };
+
+// Function for stopping user from inputting negative integers
+userInput.addEventListener("input", () => {
+  const inputValue = userInput.value;
+  if (inputValue < 0) {
+    alert("Please enter a number between 1 to 20 !");
+    userInput.value = "";
+  } else if (inputValue > 20) {
+    alert("Please enter a number between 1 to 20 !");
+    userInput.value = "";
+  }
+});
 
 // Stores the Highscore
 const storeHighScore = (HighScore) => {
