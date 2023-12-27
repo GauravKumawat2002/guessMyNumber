@@ -1,11 +1,11 @@
 "use strict";
-const startGame = document.getElementsByClassName("start");
-const resetGame = document.getElementsByClassName("again");
-const checkButton = document.getElementsByClassName("check");
+const startGame = document.getElementsByClassName("start")[0];
+const resetGame = document.getElementsByClassName("again")[0];
+const checkButton = document.getElementsByClassName("check")[0];
 const userInput = document.getElementById("userInput");
 let randomNumber = 0; // Storing random numbers
-const defaultChances = document.getElementsByClassName("defaultChances");
-const defaultHighScore = document.getElementsByClassName("highscore");
+const defaultChances = document.getElementsByClassName("defaultChances")[0];
+const defaultHighScore = document.getElementsByClassName("highscore")[0];
 let previousHighScore = 0;
 let currentHighScore = 0;
 const message = document.getElementsByClassName("message");
@@ -18,7 +18,7 @@ const stringToNumber = (string) => {
 
 // I have to declaire this variable here because if i don't do so,
 // then stringToNumber() function will not be called due it lexical scoping
-let buttonClickCounter = stringToNumber(defaultChances[0].innerHTML);
+let buttonClickCounter = stringToNumber(defaultChances.innerHTML);
 
 // Function to log to console
 const logToConsole = (input) => {
@@ -51,29 +51,32 @@ const buttonClickRecord = () => {
 };
 // Resets the Chances left back to default value whenever it is invoked
 const defaultChancesResetter = (defaultValue) => {
-  defaultChances[0].innerHTML = defaultValue;
+  defaultChances.innerHTML = defaultValue;
 };
 // Resets the High Score back to default/previous High-Score whenever it is invoked
 const defaultHighScoreResetter = (defaultValue) => {
-  defaultHighScore[0].innerHTML = defaultValue;
+  defaultHighScore.innerHTML = defaultValue;
 };
 
 // Function for updating the Chances left whenever Check button is clicked
 const updateChancesLeft = (clickCounter) => {
-  defaultChances[0].innerHTML = clickCounter;
+  defaultChances.innerHTML = clickCounter;
 };
 
 // Function for checking equality between userInput & computer gemerated number
 const checkInput = () => {
-  if (stringToNumber(userInput.value) === randomNumber) {
+  if (buttonClickCounter < 1) {
+    message[0].innerHTML = "You lose!!!";
+    checkButton.disabled = true;
+  } else if (stringToNumber(userInput.value) === randomNumber) {
     message[0].innerHTML = "You Win!!!";
-    currentHighScore = stringToNumber(defaultChances[0].innerHTML);
-    checkButton[0].disabled = true;
+    currentHighScore = stringToNumber(defaultChances.innerHTML);
+    checkButton.disabled = true;
   } else {
-    if (stringToNumber(userInput.value) > randomNumber)
-      message[0].innerHTML = "Too High!!!!";
-    else if (stringToNumber(userInput.value) < randomNumber)
-      message[0].innerHTML = "Too Low!!";
+    message[0].innerHTML =
+      stringToNumber(userInput.value) > randomNumber
+        ? "Too High!!!!"
+        : "Too Low!!";
   }
 };
 
@@ -93,26 +96,26 @@ const gameResetter = (para1, para2) => {
 
 // Game Logic Functions
 // Logic for Start Button i.e., (resetting the game back to default)
-startGame[0].addEventListener("click", () => {
+startGame.addEventListener("click", () => {
   const gameBody = document.getElementsByTagName("main")[0];
   gameBody.classList.add("visible");
   gameBody.classList.remove("hidden");
   randomNumberGenerator();
   gameResetter(20, 0);
   logToConsole(randomNumber);
-  checkButton[0].disabled = false;
+  checkButton.disabled = false;
 });
 
 // Logic for Again Button i.e., (resetting the game back to default except for highscore)
-resetGame[0].addEventListener("click", () => {
+resetGame.addEventListener("click", () => {
   randomNumberGenerator();
   gameResetter(20, currentHighScore);
   logToConsole(randomNumber);
-  checkButton[0].disabled = false;
+  checkButton.disabled = false;
 });
 
 // Logic for Checking user input number & computer generated number
-checkButton[0].addEventListener("click", () => {
+checkButton.addEventListener("click", () => {
   logToConsole(userInput.value);
   updateChancesLeft(buttonClickRecord());
   checkInput();
