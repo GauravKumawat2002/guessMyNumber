@@ -20,17 +20,10 @@ const stringToNumber = (string) => {
 // then stringToNumber() function will not be called due it lexical scoping
 let buttonClickCounter = stringToNumber(defaultChances.innerHTML);
 
-// Function to log to console
-const logToConsole = (input) => {
-  console.log(input);
-};
-
 // Function for generating random number
 const randomNumberGenerator = () => {
-  randomNumber = Math.floor(Math.random() * 20) + 1;
-  return randomNumber;
+  return Math.floor(Math.random() * 20) + 1;
 };
-randomNumber = randomNumberGenerator();
 
 // Function for stopping user from inputting negative integers
 userInput.addEventListener("input", () => {
@@ -100,23 +93,23 @@ startGame.addEventListener("click", () => {
   const gameBody = document.getElementsByTagName("main")[0];
   gameBody.classList.add("visible");
   gameBody.classList.remove("hidden");
-  randomNumberGenerator();
+  randomNumber = randomNumberGenerator();
   gameResetter(20, 0);
-  logToConsole(randomNumber);
+  console.log(randomNumber);
   checkButton.disabled = false;
 });
 
 // Logic for Again Button i.e., (resetting the game back to default except for highscore)
 resetGame.addEventListener("click", () => {
-  randomNumberGenerator();
+  randomNumber = randomNumberGenerator();
   gameResetter(20, currentHighScore);
-  logToConsole(randomNumber);
+  console.log(randomNumber);
   checkButton.disabled = false;
 });
 
 // Logic for Checking user input number & computer generated number
 checkButton.addEventListener("click", () => {
-  logToConsole(userInput.value);
+  console.log(userInput.value);
   updateChancesLeft(buttonClickRecord());
   checkInput();
 });
