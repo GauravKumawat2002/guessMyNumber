@@ -2,24 +2,18 @@
 const startGame = document.getElementsByClassName("start")[0];
 const resetGame = document.getElementsByClassName("again")[0];
 const checkButton = document.getElementsByClassName("check")[0];
+const gameBody = document.getElementsByTagName("main")[0];
 const userInput = document.getElementById("userInput");
-let randomNumber = 0; // Storing random numbers
 const defaultChances = document.getElementsByClassName("defaultChances")[0];
 const defaultHighScore = document.getElementsByClassName("highscore")[0];
-let previousHighScore = 0;
-let currentHighScore = 0;
 const message = document.getElementsByClassName("message");
+let randomNumber = 0; // Storing random numbers
+let buttonClickCounter = parseInt(defaultChances.innerHTML);
+let previousChancesLeft = 0;
+let currentChancesLeft = 0;
+let flag = false;
 
 // Uitlity Functions
-// Function to convert any string to number (Useful when I have to convert any HTML string into number)
-const stringToNumber = (string) => {
-  return Number(string);
-};
-
-// I have to declaire this variable here because if i don't do so,
-// then stringToNumber() function will not be called due it lexical scoping
-let buttonClickCounter = stringToNumber(defaultChances.innerHTML);
-
 // Function for generating random number
 const randomNumberGenerator = () => {
   return Math.floor(Math.random() * 20) + 1;
@@ -61,15 +55,13 @@ const checkInput = () => {
   if (buttonClickCounter < 1) {
     message[0].innerHTML = "You lose!!!";
     checkButton.disabled = true;
-  } else if (stringToNumber(userInput.value) === randomNumber) {
+  } else if (parseInt(userInput.value) === randomNumber) {
     message[0].innerHTML = "You Win!!!";
-    currentHighScore = stringToNumber(defaultChances.innerHTML);
+    currentChancesLeft = parseInt(defaultChances.innerHTML);
     checkButton.disabled = true;
   } else {
     message[0].innerHTML =
-      stringToNumber(userInput.value) > randomNumber
-        ? "Too High!!!!"
-        : "Too Low!!";
+      parseInt(userInput.value) > randomNumber ? "Too High!!!!" : "Too Low!!";
   }
 };
 
@@ -85,32 +77,62 @@ const gameResetter = (para1, para2) => {
   // gameResetter() is the parent function responsible for bringing the game back to default values
   defaultHighScoreResetter(para2);
 };
+
+// Logic for updating the highScore as per rules
+const highScoreLogic = (previous, current) => {
+  if (previous < current)
+    defaultHighScore.innerHTML = parseInt(defaultHighScore.innerHTML) + current;
+  else if (previous === current)
+    defaultHighScore.innerHTML = Math.round(
+      0.8 * (parseInt(defaultHighScore.innerHTML) + current)
+    );
+};
 // -------------------------------------------------------------------- //
 
 // Game Logic Functions
 // Logic for Start Button i.e., (resetting the game back to default)
 startGame.addEventListener("click", () => {
-  const gameBody = document.getElementsByTagName("main")[0];
   gameBody.classList.add("visible");
   gameBody.classList.remove("hidden");
   randomNumber = randomNumberGenerator();
   gameResetter(20, 0);
-  console.log(randomNumber);
   checkButton.disabled = false;
+  flag = false;
 });
 
 // Logic for Again Button i.e., (resetting the game back to default except for highscore)
 resetGame.addEventListener("click", () => {
   randomNumber = randomNumberGenerator();
-  gameResetter(20, currentHighScore);
-  console.log(randomNumber);
+  gameResetter(20, parseInt(defaultHighScore.innerHTML));
   checkButton.disabled = false;
+  flag = true;
+  if (flag) {
+    previousChancesLeft = currentChancesLeft;
+    currentChancesLeft = 0;
+  }
 });
 
 // Logic for Checking user input number & computer generated number
 checkButton.addEventListener("click", () => {
-  console.log(userInput.value);
   updateChancesLeft(buttonClickRecord());
   checkInput();
+  highScoreLogic(parseInt(previousChancesLeft), parseInt(currentChancesLeft));
 });
+// -------------------------------------------------------------------- //
+
+// some useful console.logs for debugging
+// ----------------------- Paste on line No. 92 ----------------------- //
+// console.log(
+//   `defaultHighScore.innerHTML = ${parseInt(
+//     defaultHighScore.innerHTML
+//   )} + currentChancesLeft = ${current} = ${
+//     parseInt(defaultHighScore.innerHTML) + current
+//   }`
+// );
+
+// ----------------------- Paste on line No. 109 ----------------------- //
+// console.log(randomNumber);
+
+// ----------------------- Paste on line No. 118 ----------------------- //
+// console.log(randomNumber);
 // -------------------------------------------------------------------- //
