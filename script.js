@@ -3,10 +3,11 @@ const startGame = document.getElementsByClassName("start")[0];
 const resetGame = document.getElementsByClassName("again")[0];
 const checkButton = document.getElementsByClassName("check")[0];
 const gameBody = document.getElementsByTagName("main")[0];
+const qMark = document.getElementsByClassName("number")[0];
 const userInput = document.getElementById("userInput");
 const defaultChances = document.getElementsByClassName("defaultChances")[0];
 const defaultHighScore = document.getElementsByClassName("highscore")[0];
-const message = document.getElementsByClassName("message");
+const message = document.getElementsByClassName("message")[0];
 let randomNumber = 0; // Storing random numbers
 let buttonClickCounter = parseInt(defaultChances.innerHTML);
 let previousChancesLeft = 0;
@@ -17,6 +18,11 @@ let flag = false;
 // Function for generating random number
 const randomNumberGenerator = () => {
   return Math.floor(Math.random() * 20) + 1;
+};
+
+// Function for displaying message
+const displayMessage = (kyaLu, textMessage) => {
+  kyaLu.innerHTML = textMessage;
 };
 
 // Function for stopping user from inputting negative integers
@@ -52,16 +58,27 @@ const updateChancesLeft = (clickCounter) => {
 
 // Function for checking equality between userInput & computer gemerated number
 const checkInput = () => {
+  displayMessage(
+    message,
+    buttonClickCounter < 1
+      ? "You lose!!!"
+      : parseInt(userInput.value) > randomNumber
+      ? "📈 Too High!!!!"
+      : "📉 Too Low"
+  );
   if (buttonClickCounter < 1) {
-    message[0].innerHTML = "You lose!!!";
+    document.querySelector("body").classList.add("red");
+    document.querySelector("body").classList.remove("gray");
     checkButton.disabled = true;
-  } else if (parseInt(userInput.value) === randomNumber) {
-    message[0].innerHTML = "You Win!!!";
+  }
+
+  if (parseInt(userInput.value) === randomNumber) {
     currentChancesLeft = parseInt(defaultChances.innerHTML);
+    displayMessage(message, "🎊🎉 You Win!!!");
+    displayMessage(qMark, randomNumber);
     checkButton.disabled = true;
-  } else {
-    message[0].innerHTML =
-      parseInt(userInput.value) > randomNumber ? "Too High!!!!" : "Too Low!!";
+    document.querySelector("body").classList.add("green");
+    document.querySelector("body").classList.remove("gray");
   }
 };
 
@@ -69,7 +86,11 @@ const checkInput = () => {
 const gameResetter = (para1, para2) => {
   userInput.value = "";
   buttonClickCounter = 20;
-  message[0].innerHTML = "Start guessing...";
+  document.querySelector("body").classList.add("gray");
+  document.querySelector("body").classList.remove("green");
+  document.querySelector("body").classList.remove("red");
+  displayMessage(message, "Start guessing...");
+  displayMessage(qMark, "?");
   // calling defaultChancesResetter() here as,
   // gameResetter() is the parent function responsible for bringing the game back to default values
   defaultChancesResetter(para1);
@@ -80,12 +101,14 @@ const gameResetter = (para1, para2) => {
 
 // Logic for updating the highScore as per rules
 const highScoreLogic = (previous, current) => {
-  if (previous < current)
-    defaultHighScore.innerHTML = parseInt(defaultHighScore.innerHTML) + current;
-  else if (previous === current)
-    defaultHighScore.innerHTML = Math.round(
-      0.8 * (parseInt(defaultHighScore.innerHTML) + current)
-    );
+  displayMessage(
+    defaultHighScore,
+    previous < current
+      ? parseInt(defaultHighScore.innerHTML) + current
+      : previous === current
+      ? Math.round(0.8 * (parseInt(defaultHighScore.innerHTML) + current))
+      : parseInt(defaultHighScore.innerHTML)
+  );
 };
 // -------------------------------------------------------------------- //
 

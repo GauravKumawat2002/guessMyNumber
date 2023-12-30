@@ -25,7 +25,15 @@ body {
 .visible {
   visibility: visible;
 }
-
+.gray {
+  background-color: hsl(0, 0%, 13%);
+}
+.green {
+  background-color: hsl(106, 43%, 49%);
+}
+.red {
+  background-color: hsl(0, 43%, 49%);
+}
 /* LAYOUT */
 header {
   display: flex;
