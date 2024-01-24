@@ -101,23 +101,7 @@ const utilityFunctions = {
 // Function for stopping user from inputting negative integers & number greater than 20
 userInput.addEventListener("input", function () {
   const inputValue = this.value;
-  // inputValue < 0 || inputValue > 20 || utilityFunctions.resetInput(this);
-
-  //This won't work because function call itself is considered as true,
-  // (or simply we can say that if doing short-circuiting with || (OR) means
-
-  // if the first condition is false, then simply it will run the other part of the evaluation, like it checks that atleast one statement should be true amongst the evaluation it will run the true statement if rest of the evaluation is false, )
   (inputValue < 0 || inputValue > 20) && utilityFunctions.resetInput(this);
-  //This will work because --> short-circuiting with && (AND) means
-  // If the first part of the evaluation is true only then it will continue to execute the evaluation
-  // If any part of the evaluation is false then the entire evaluation will short circuit & nothing will work
-
-  // ----------------------------------------------------------------- //
-
-  /* In a nutshell
-    The || (OR) operator ensures execution as long as one of its operands is true.
-    The && (AND) operator will ensures execution if & only if all of its operands are true.
-*/
 });
 
 // -------------------------------------------------------------------- //
@@ -156,58 +140,3 @@ checkButton.addEventListener("click", () => {
   );
 });
 // -------------------------------------------------------------------- //
-
-// Some useful console.logs for debugging
-// ---------------------------------------------- //
-// console.log(
-//   `defaultHighScore.innerHTML = ${parseInt(
-//     defaultHighScore.innerHTML
-//   )} + currentChancesLeft = ${current} = ${
-//     parseInt(defaultHighScore.innerHTML) + current
-//   }`
-// );
-// ---------------------------------------------- //
-
-// Using the spread operator
-// function sumNormal(...paras) {
-//   let sum = 0;
-//   for (let para of paras) {
-//     sum += para;
-//   }
-//   return console.log(sum);
-// }
-// sumNormal(2, 3, 4, 345, 21341234, 6545634634, 4231412341234123, 563456345646);
-
-// same functionality but with three different coding approaches
-
-// 1. Using if statement
-// if (inputValue < 0 || inputValue > 20) {
-// utilityFunctions.resetInput(this);
-// }
-
-// 2. Using ternary operator
-// inputValue < 0 || inputValue > 20 ? utilityFunctions.resetInput(this) : null;
-
-// 3. Using short-circuiting
-// (inputValue < 0 || inputValue > 20) && utilityFunctions.resetInput(this);
-
-// 1. Using ternary operator
-// buttonClickCounter < 1
-//   ? "You lose!!!"
-//   : parseInt(userInput.value) > randomNumber
-//   ? "📈 Too High!!!!"
-//   : "📉 Too Low!!"
-
-// 2. Using short-circuiting
-// (buttonClickCounter < 1 && "You lose!!!") ||
-//   (parseInt(userInput.value) > randomNumber && "📈 Too High!!!!") ||
-//   "📉 Too Low!!"
-
-// -------------------------------------------------------------------- //
-// ||
-//       (parseInt(userInput.value) === randomNumber &&
-//         ((currentChancesLeft = parseInt(defaultChances.innerHTML)),
-//         this.colorChanger("green", "gray"),
-//         this.displayMessage(message, "🎊🎉 You Win!!!"),
-//         this.displayMessage(qMark, randomNumber),
-//         (checkButton.disabled = true)));
