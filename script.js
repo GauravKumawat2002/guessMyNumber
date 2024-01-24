@@ -45,25 +45,19 @@ const utilityFunctions = {
   checkInput: function () {
     this.displayMessage(
       message,
-      buttonClickCounter < 1
-        ? "You lose!!!"
-        : parseInt(userInput.value) > randomNumber
-        ? "📈 Too High!!!!"
-        : "📉 Too Low"
+      (buttonClickCounter < 1 &&
+        (this.colorChanger("red", "gray"),
+        ((checkButton.disabled = true), "You lose!!!"))) ||
+        (parseInt(userInput.value) > randomNumber && "📈 Too High!!!!") ||
+        "📉 Too Low!!"
     );
-    if (buttonClickCounter < 1) {
-      document.querySelector("body").classList.add("red");
-      document.querySelector("body").classList.remove("gray");
-      checkButton.disabled = true;
-    }
 
     if (parseInt(userInput.value) === randomNumber) {
       currentChancesLeft = parseInt(defaultChances.innerHTML);
       this.displayMessage(message, "🎊🎉 You Win!!!");
       this.displayMessage(qMark, randomNumber);
       checkButton.disabled = true;
-      document.querySelector("body").classList.add("green");
-      document.querySelector("body").classList.remove("gray");
+      this.colorChanger("green", "gray");
     }
   },
   // Logic for updating the highScore as per rules
@@ -77,13 +71,18 @@ const utilityFunctions = {
         : parseInt(defaultHighScore.innerHTML)
     );
   },
+  colorChanger: function (add, ...remove) {
+    document.querySelector("body").classList.add(add);
+    for (const item of remove) {
+      document.querySelector("body").classList.remove(item);
+    }
+  },
+
   // Resets everything (input field to blank, Score to 20, Highscore to 0) to it's default values
   gameResetter: function (para1, para2) {
     userInput.value = "";
     buttonClickCounter = 20;
-    document.querySelector("body").classList.add("gray");
-    document.querySelector("body").classList.remove("green");
-    document.querySelector("body").classList.remove("red");
+    this.colorChanger("gray", "green", "red");
     this.displayMessage(message, "Start guessing...");
     this.displayMessage(qMark, "?");
     // calling defaultChancesResetter() here as,
@@ -93,27 +92,32 @@ const utilityFunctions = {
     // gameResetter() is the parent function responsible for bringing the game back to default values
     this.defaultHighScoreResetter(para2);
   },
+  resetInput: function (para1) {
+    alert("Please enter a number between 1 to 20 !");
+    para1.value = "";
+  },
 };
 
-// function sumNormal(...paras) {
-//   let sum = 0;
-//   for (let para of paras) {
-//     sum += para;
-//   }
-//   return console.log(sum);
-// }
-// sumNormal(2, 3, 4, 345, 21341234, 6545634634, 4231412341234123, 563456345646);
-
-// Function for stopping user from inputting negative integers
+// Function for stopping user from inputting negative integers & number greater than 20
 userInput.addEventListener("input", function () {
   const inputValue = this.value;
-  if (inputValue < 0) {
-    alert("Please enter a number between 1 to 20 !");
-    this.value = "";
-  } else if (inputValue > 20) {
-    alert("Please enter a number between 1 to 20 !");
-    this.value = "";
-  }
+  // inputValue < 0 || inputValue > 20 || utilityFunctions.resetInput(this);
+
+  //This won't work because function call itself is considered as true,
+  // (or simply we can say that if doing short-circuiting with || (OR) means
+
+  // if the first condition is false, then simply it will run the other part of the evaluation, like it checks that atleast one statement should be true amongst the evaluation it will run the true statement if rest of the evaluation is false, )
+  (inputValue < 0 || inputValue > 20) && utilityFunctions.resetInput(this);
+  //This will work because --> short-circuiting with && (AND) means
+  // If the first part of the evaluation is true only then it will continue to execute the evaluation
+  // If any part of the evaluation is false then the entire evaluation will short circuit & nothing will work
+
+  // ----------------------------------------------------------------- //
+
+  /* In a nutshell
+    The || (OR) operator ensures execution as long as one of its operands is true.
+    The && (AND) operator will ensures execution if & only if all of its operands are true.
+*/
 });
 
 // -------------------------------------------------------------------- //
@@ -137,10 +141,9 @@ resetGame.addEventListener("click", () => {
   utilityFunctions.gameResetter(20, parseInt(defaultHighScore.innerHTML));
   checkButton.disabled = false;
   flag = true;
-  if (flag) {
-    previousChancesLeft = currentChancesLeft;
-    currentChancesLeft = 0;
-  }
+  flag
+    ? ((previousChancesLeft = currentChancesLeft), (currentChancesLeft = 0))
+    : null;
 });
 
 // Logic for Checking user input number & computer generated number
@@ -154,8 +157,8 @@ checkButton.addEventListener("click", () => {
 });
 // -------------------------------------------------------------------- //
 
-// some useful console.logs for debugging
-// ----------------------- Paste on line No. 92 ----------------------- //
+// Some useful console.logs for debugging
+// ---------------------------------------------- //
 // console.log(
 //   `defaultHighScore.innerHTML = ${parseInt(
 //     defaultHighScore.innerHTML
@@ -163,10 +166,48 @@ checkButton.addEventListener("click", () => {
 //     parseInt(defaultHighScore.innerHTML) + current
 //   }`
 // );
+// ---------------------------------------------- //
 
-// ----------------------- Paste on line No. 109 ----------------------- //
-// console.log(randomNumber);
+// Using the spread operator
+// function sumNormal(...paras) {
+//   let sum = 0;
+//   for (let para of paras) {
+//     sum += para;
+//   }
+//   return console.log(sum);
+// }
+// sumNormal(2, 3, 4, 345, 21341234, 6545634634, 4231412341234123, 563456345646);
 
-// ----------------------- Paste on line No. 118 ----------------------- //
-// console.log(randomNumber);
+// same functionality but with three different coding approaches
+
+// 1. Using if statement
+// if (inputValue < 0 || inputValue > 20) {
+// utilityFunctions.resetInput(this);
+// }
+
+// 2. Using ternary operator
+// inputValue < 0 || inputValue > 20 ? utilityFunctions.resetInput(this) : null;
+
+// 3. Using short-circuiting
+// (inputValue < 0 || inputValue > 20) && utilityFunctions.resetInput(this);
+
+// 1. Using ternary operator
+// buttonClickCounter < 1
+//   ? "You lose!!!"
+//   : parseInt(userInput.value) > randomNumber
+//   ? "📈 Too High!!!!"
+//   : "📉 Too Low!!"
+
+// 2. Using short-circuiting
+// (buttonClickCounter < 1 && "You lose!!!") ||
+//   (parseInt(userInput.value) > randomNumber && "📈 Too High!!!!") ||
+//   "📉 Too Low!!"
+
 // -------------------------------------------------------------------- //
+// ||
+//       (parseInt(userInput.value) === randomNumber &&
+//         ((currentChancesLeft = parseInt(defaultChances.innerHTML)),
+//         this.colorChanger("green", "gray"),
+//         this.displayMessage(message, "🎊🎉 You Win!!!"),
+//         this.displayMessage(qMark, randomNumber),
+//         (checkButton.disabled = true)));
